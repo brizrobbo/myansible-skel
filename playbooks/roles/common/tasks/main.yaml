@@ -1,0 +1,47 @@
+---
+- osx_say:
+    msg: 'common role is started'
+    voice: "{{ osx_voice }}"
+  delegate_to: localhost
+
+- name: "Set USER_HOME env var facts"
+  set_fact:
+    USER_HOME: "{{ lookup('env','HOME') }}"
+  tags:
+    - always
+
+- debug:
+    msg:
+      - 'Error in env; HOME env variable does not exist.  Please set!'
+  when: not USER_HOME
+  failed_when: not USER_HOME
+  tags:
+    - always
+
+- name: "Set PROJECT_NAME env var facts"
+  set_fact:
+    PROJECT_NAME: "{{ lookup('env','PROJECT_NAME') }}"
+  tags:
+    - always
+
+- debug:
+    msg:
+      - 'Error in env; PROJECT_NAME env variable does not exist.  Please set!'
+  when: not PROJECT_NAME
+  failed_when: not PROJECT_NAME
+  tags:
+    - always
+
+- name: "Set VIRTUALENV_HOME env var facts"
+  set_fact:
+    VIRTUALENV_HOME: "{{ lookup('env','VIRTUALENV_HOME') }}"
+  tags:
+    - always
+
+- debug:
+    msg:
+      - 'Error in env; VIRTUALENV_HOME env variable does not exist.  Please set!'
+  when: not VIRTUALENV_HOME
+  failed_when: not VIRTUALENV_HOME
+  tags:
+    - always

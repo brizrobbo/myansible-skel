@@ -1,0 +1,11 @@
+boto
+boto3
+configparser
+setuptools
+paramiko
+PyYAML
+Jinja2
+httplib2
+six
+pyopenssl
+netaddr

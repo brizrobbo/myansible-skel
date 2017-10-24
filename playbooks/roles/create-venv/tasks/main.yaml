@@ -1,0 +1,23 @@
+---
+- osx_say:
+    msg: 'create-venv role is started'
+    voice: "{{ osx_voice }}"
+  delegate_to: localhost
+
+- name: Upgrade pip
+  pip:
+    name: pip
+    extra_args: --upgrade
+    virtualenv: "{{ VIRTUALENV_HOME }}/{{ PROJECT_NAME }}"
+
+- name: Install dependencies
+  pip:
+    requirements: "{{ VIRTUALENV_HOME }}/myansible-skel/myansible-skel/playbooks/files/pip-requirements.txt"
+    virtualenv: "{{ VIRTUALENV_HOME }}/{{ PROJECT_NAME }}"
+    virtualenv_command: virtualenv-2.7
+
+- name: Install Ansible
+  pip:
+    name: ansible==2.2.2.0
+    virtualenv: "{{ VIRTUALENV_HOME }}/{{ PROJECT_NAME }}"
+    virtualenv_command: virtualenv-2.7

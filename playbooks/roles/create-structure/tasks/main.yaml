@@ -1,0 +1,66 @@
+---
+- osx_say:
+    msg: 'create-structure role is started'
+    voice: "{{ osx_voice }}"
+  delegate_to: localhost
+  when: ansible_os_family == 'Darwin'
+
+- name: Creates 'inventory' directory
+  file:
+    path: "{{ VIRTUALENV_HOME }}/{{ PROJECT_NAME }}/inventory"
+    state: directory
+
+- name: Creating hosts file
+  template:
+    src: "{{ role_path }}/files/hosts.j2"
+    dest: "{{ VIRTUALENV_HOME }}/{{ PROJECT_NAME }}/inventory/hosts"
+    mode: 0644
+
+- name: Creates 'playbooks' directory
+  file:
+    path: "{{ VIRTUALENV_HOME }}/{{ PROJECT_NAME }}/playbooks"
+    state: directory
+
+- name: Creates 2nd-level directories
+  file:
+    path: "{{ VIRTUALENV_HOME }}/{{ PROJECT_NAME }}/playbooks/{{ item }}"
+    state: directory
+  with_items:
+    - files
+    - roles
+    - vars
+
+- name: Creates roles/common/task directory
+  file:
+    path: "{{ VIRTUALENV_HOME }}/{{ PROJECT_NAME }}/playbooks/roles/common/tasks"
+    state: directory
+
+- name: Creating common role main playbook file
+  copy:
+    src: "{{ role_path }}/files/common_main.yml"
+    dest: "{{ VIRTUALENV_HOME }}/{{ PROJECT_NAME }}/playbooks/roles/common/tasks/main.yml"
+    mode: 0644
+
+- name: Creating ansible.cfg file
+  copy:
+    src: "{{ role_path }}/files/ansible.cfg"
+    dest: "{{ VIRTUALENV_HOME }}/{{ PROJECT_NAME }}/ansible.cfg"
+    mode: 0644
+
+- name: Creating main playbook file
+  copy:
+    src: "{{ role_path }}/files/site.yml"
+    dest: "{{ VIRTUALENV_HOME }}/{{ PROJECT_NAME }}/playbooks"
+    mode: 0644
+
+- name: Creating global vars file
+  copy:
+    src: "{{ role_path }}/files/global.yml"
+    dest: "{{ VIRTUALENV_HOME }}/{{ PROJECT_NAME }}/playbooks/vars"
+    mode: 0644
+
+- name: Creating make.sh launch script
+  copy:
+    src: "{{ role_path }}/files/make.sh"
+    dest: "{{ VIRTUALENV_HOME }}/{{ PROJECT_NAME }}"
+    mode: 0755
